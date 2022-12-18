@@ -51,9 +51,6 @@ class Game extends React.Component {
       ],
       stepNumber: 0,
       xIsNext: true,
-      indexBtn: 0,
-      col: 0,
-      row: 0,
     };
   }
 
@@ -74,9 +71,7 @@ class Game extends React.Component {
         }
       }
     }
-    this.setState({
-      col: posCol,
-    });
+    return posCol
   }
 
   getRow(index) {
@@ -96,9 +91,7 @@ class Game extends React.Component {
         }
       }
     }
-    this.setState({
-      row: posRow,
-    });
+    return posRow
   }
 
   handleClick(i) {
@@ -108,8 +101,6 @@ class Game extends React.Component {
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    this.getCol(i);
-    this.getRow(i);
     squares[i] = this.state.xIsNext ? "X" : "O";
     this.setState({
       history: history.concat([
@@ -119,7 +110,6 @@ class Game extends React.Component {
       ]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
-      indexBtn: i,
     });
   }
 
@@ -139,7 +129,7 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
       const desc = move ? "Перейти к ходу" + " " + move : "К началу игры";
-      const pos = "колонка" + this.state.col + ", ряд:" + this.state.row;
+      const pos = "колонка: " + this.getCol() + ", ряд: " + this.getRow();
       return (
         <li key={move}>
           <button
