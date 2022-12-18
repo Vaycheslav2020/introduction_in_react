@@ -76,7 +76,7 @@ class Game extends React.Component {
     }
     this.setState({
       col: posCol,
-    })
+    });
   }
 
   getRow(index) {
@@ -86,7 +86,7 @@ class Game extends React.Component {
       [3, 4, 5],
       [6, 7, 8],
     ];
-    
+
     for (let i = 0; i < row.length; i++) {
       const el = row[i];
       for (let j = 0; j < el.length; j++) {
@@ -98,7 +98,7 @@ class Game extends React.Component {
     }
     this.setState({
       row: posRow,
-    })
+    });
   }
 
   handleClick(i) {
@@ -106,20 +106,10 @@ class Game extends React.Component {
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
-      const line = calculateWinner(squares)
-      if (line.length !== null) {
-        for (let i = 0; i < line.length; i++) {
-          const el = line[i];
-          let list = document.querySelectorAll(".square")
-          list[el].style.background = "red"
-        } 
-      } else {
-        document.write("игра закончилась в ничью")
-      }
       return;
     }
-    this.getCol(i)
-    this.getRow(i)
+    this.getCol(i);
+    this.getRow(i);
     squares[i] = this.state.xIsNext ? "X" : "O";
     this.setState({
       history: history.concat([
@@ -134,12 +124,12 @@ class Game extends React.Component {
   }
 
   jumpTo(step) {
-    document.querySelectorAll(".square").forEach(sqr => {
-      sqr.style.background = "none"
-    })
     this.setState({
       stepNumber: step,
       xIsNext: step % 2 === 0,
+    });
+    document.querySelectorAll(".square").forEach((sqr) => {
+      sqr.style.background = "none";
     });
   }
 
@@ -149,7 +139,7 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
       const desc = move ? "Перейти к ходу" + " " + move : "К началу игры";
-      const pos = "колонка" + this.state.col + ", ряд:" + this.state.row
+      const pos = "колонка" + this.state.col + ", ряд:" + this.state.row;
       return (
         <li key={move}>
           <button
@@ -203,7 +193,13 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return lines[i];
+      const linesItem = lines[i]
+      for (let i = 0; i < linesItem.length; i++) {
+        const sqr = linesItem[i]
+        let list = document.querySelectorAll(".square")
+        list[sqr].style.background = "red"
+      }
+      return squares[a];
     }
   }
   return null;
